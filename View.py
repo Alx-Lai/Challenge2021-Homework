@@ -75,13 +75,35 @@ class GraphicalView:
             center = list(map(int, player.position))
             pg.draw.circle(self.screen, Const.PLAYER_COLOR[player.player_id], center, Const.PLAYER_RADIUS)
 
+        #show status
+        font = pg.font.Font(None, 24)
+        text_surface = font.render('Attacker: Player'+str(self.model.attack_side), 1, (255,255,255))
+        text_center = (Const.ARENA_SIZE[0] / 2, Const.ARENA_SIZE[1] / 5 + 100)
+        self.screen.blit(text_surface, text_surface.get_rect(center = text_center))
+
+        text_surface = font.render('Exchange Countdown : '+str(int(self.model.exchange_countdown)), 1, (255,255,255))
+        text_center = (Const.ARENA_SIZE[0] / 2, Const.ARENA_SIZE[1] / 5 + 50)
+        self.screen.blit(text_surface, text_surface.get_rect(center = text_center))
+
+        text_surface = font.render('Game Countdown : '+str(int(self.model.timer/Const.FPS)), 1, (255,255,255))
+        text_center = (Const.ARENA_SIZE[0] / 2, Const.ARENA_SIZE[1] / 5)
+        self.screen.blit(text_surface, text_surface.get_rect(center = text_center))
         pg.display.flip()
 
     def render_stop(self):
-        pass
+        font = pg.font.Font(None, 54)
+        text_surface = font.render('Paused', 1, (255,255,255))
+        text_center = (Const.ARENA_SIZE[0] / 2, Const.ARENA_SIZE[1] / 2)
+        self.screen.blit(text_surface, text_surface.get_rect(center = text_center))
+        pg.display.flip()
 
     def render_endgame(self):
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
 
+        #endgame msg
+        font = pg.font.Font(None, 36)
+        text_surface = font.render('End ', 1, (255,255,255))
+        text_center = (Const.ARENA_SIZE[0] / 2, Const.ARENA_SIZE[1] / 2)
+        self.screen.blit(text_surface, text_surface.get_rect(center = text_center))
         pg.display.flip()

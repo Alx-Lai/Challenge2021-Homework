@@ -13,6 +13,7 @@ DIRECTION_TO_VEC2 = {
     'down': pg.Vector2(0, 1),
     'right': pg.Vector2(1, 0),
 }
+t = int(5)
 
 
 # State machine constants

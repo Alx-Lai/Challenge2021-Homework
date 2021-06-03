@@ -78,10 +78,14 @@ class GameEngine:
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(0), Player(1)]
 
+        self.attack_side = 1
+        self.exchange_countdown = Const.t
+
     def notify(self, event: BaseEvent):
         '''
         Called by EventManager when a event occurs.
         '''
+        
         if isinstance(event, EventInitialize):
             self.initialize()
 
@@ -114,6 +118,7 @@ class GameEngine:
 
         elif isinstance(event, EventTimesUp):
             self.state_machine.push(Const.STATE_ENDGAME)
+        
 
     def update_menu(self):
         '''
@@ -148,6 +153,17 @@ class GameEngine:
         while self.running:
             self.ev_manager.post(EventEveryTick())
             self.clock.tick(Const.FPS)
+            dist_sq = (self.players[0].position.x-self.players[1].position.x) ** 2 + (self.players[0].position.y-self.players[1].position.y) ** 2
+            dist = dist_sq ** 0.5
+            if dist <= 2*Const.PLAYER_RADIUS:
+                self.state_machine.push(Const.STATE_ENDGAME)
+            self.exchange_countdown = (self.timer/Const.FPS) % Const.t
+            if self.timer != Const.GAME_LENGTH and self.timer != 0 and self.exchange_countdown == 0:
+                self.attack_side ^= 1
+                #print(self.attack_side)
+                for player in self.players:
+                    player.speed = Const.SPEED_ATTACK if player.player_id == self.attack_side else Const.SPEED_DEFENSE
+
 
 
 class Player:
